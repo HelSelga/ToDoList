@@ -10,26 +10,26 @@ on:
       - 'master'
 
 jobs:
-  tests:
-    runs-on: ubuntu-22.04
-    env:
-      DEBUG: False
-      POSTGRES_USER: postgres
-      POSTGRES_DB: postgres
-      POSTGRES_PASSWORD: postgres
-      SECRET_KEY: 'gsjgeurhit6584gfhhh'
-#      SOCIAL_AUTH_VK_OAUTH2_SECRET: 1234567890
-#      SOCIAL_AUTH_VK_OAUTH2_KEY: 0987654321
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Create env file and build image
-        run: |
-          env > .env
-          docker-compose build
-      - name: Run tests
-        run: |
-          docker-compose run --rm api python manage.py test
+#  tests:
+#    runs-on: ubuntu-22.04
+#    env:
+#      DEBUG: False
+#      POSTGRES_USER: postgres
+#      POSTGRES_DB: postgres
+#      POSTGRES_PASSWORD: postgres
+#      SECRET_KEY: 'gsjgeurhit6584gfhhh'
+##      SOCIAL_AUTH_VK_OAUTH2_SECRET: 1234567890
+##      SOCIAL_AUTH_VK_OAUTH2_KEY: 0987654321
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#      - name: Create env file and build image
+#        run: |
+#          env > .env
+#          docker-compose build
+#      - name: Run tests
+#        run: |
+#          docker-compose run --rm api python manage.py test
 
   build:
     if: startsWith(github.event.ref, 'refs/tags/v')
