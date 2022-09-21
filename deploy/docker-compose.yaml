@@ -15,7 +15,7 @@ services:
       retries: 5
 
   api:
-    image: ${DOCKERHUB_USERNAME}/diplom:latest
+    image: ${DOCKERHUB_USERNAME}/diplom:master
     restart: always
     env_file:
       - .env
