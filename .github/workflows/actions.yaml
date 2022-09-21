@@ -10,31 +10,31 @@ on:
       - 'master'
 
 jobs:
-#  tests:
-#    runs-on: ubuntu-22.04
-#    env:
-#      DEBUG: False
-#      POSTGRES_USER: postgres
-#      POSTGRES_DB: postgres
-#      POSTGRES_PASSWORD: postgres
-#      SECRET_KEY: 'gsjgeurhit6584gfhhh'
-##      SOCIAL_AUTH_VK_OAUTH2_SECRET: 1234567890
-##      SOCIAL_AUTH_VK_OAUTH2_KEY: 0987654321
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#      - name: Create env file and build image
-#        run: |
-#          env > .env
-#          docker-compose build
-#      - name: Run tests
-#        run: |
-#          docker-compose run --rm api python manage.py test
+  tests:
+    runs-on: ubuntu-22.04
+    env:
+      DEBUG: False
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+      SECRET_KEY: 'gsjgeurhit6584gfhhh'
+#      SOCIAL_AUTH_VK_OAUTH2_SECRET: 1234567890
+#      SOCIAL_AUTH_VK_OAUTH2_KEY: 0987654321
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Create env file and build image
+        run: |
+          env > .env
+          docker-compose build
+      - name: Run tests
+        run: |
+          docker-compose run --rm api python manage.py test
 
   build:
     if: startsWith(github.event.ref, 'refs/tags/v')
     runs-on: ubuntu-22.04
-#    needs: tests
+    needs: tests
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -55,48 +55,48 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-#
-#  deploy:
-#    runs-on: ubuntu-22.04
-#    needs: build
-#    env:
-#      SECRET_KEY: ${{ secrets.SECRET_KEY }}
-#      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-#      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-#      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-##      SOCIAL_AUTH_VK_OAUTH2_SECRET: 1234567890
-##      SOCIAL_AUTH_VK_OAUTH2_KEY: 0987654321
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#      - name: Render configs
-#        run: |
-#          env > deploy/.env
-#      - name: Clone code to server
-#        uses: appleboy/scp-action@master
-#        with:
-#          host: ${{ secrets.HOST }}
-#          username: ${{ secrets.SSH_USERNAME }}
-#          password: ${{ secrets.SSH_PASSWORD }}
-#          source: "deploy/"
-#          target: diplom
-#          strip_components: 1
-#      - name: run docker-compose
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.HOST }}
-#          username: ${{ secrets.SSH_USERNAME }}
-#          password: ${{ secrets.SSH_PASSWORD }}
-#          script: |
-#            cd diplom
-#            docker compose pull
-#            docker compose up -d
-#      - name: Clear after deploy
-#        if: always()
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.HOST }}
-#          username: ${{ secrets.SSH_USERNAME }}
-#          password: ${{ secrets.SSH_PASSWORD }}
-#          script: |
-#            docker system prune -a -f
+
+  deploy:
+    runs-on: ubuntu-22.04
+    needs: build
+    env:
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+#      SOCIAL_AUTH_VK_OAUTH2_SECRET: 1234567890
+#      SOCIAL_AUTH_VK_OAUTH2_KEY: 0987654321
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Render configs
+        run: |
+          env > deploy/.env
+      - name: Clone code to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "deploy/"
+          target: diplom
+          strip_components: 1
+      - name: run docker-compose
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd diplom
+            docker compose pull
+            docker compose up -d
+      - name: Clear after deploy
+        if: always()
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            docker system prune -a -f
