@@ -28,5 +28,13 @@ services:
     expose:
       - 8000
 
+  front:
+    image: sermalenk/skypro-front:lesson-36
+    ports:
+      - 8034:80
+    depends_on:
+      api:
+        condition: service_healthy
+
 volumes:
   postgres_data_tdl:

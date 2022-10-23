@@ -30,6 +30,8 @@ urlpatterns = [
     # path('api/token/', TokenObtainPairView.as_view(), name='token'),
     # path('api/refresh/', TokenRefreshView.as_view(), name='refresh token'),
     # path("core/", include("core.urls")),
+    # path("goals/", include("goals.urls")),
+    # path("bot/", include("bot.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
