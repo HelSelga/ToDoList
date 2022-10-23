@@ -34,6 +34,3 @@ services:
     depends_on:
       api:
         condition: service_healthy
-
-  volumes:
-    postgres_data_tdl:
