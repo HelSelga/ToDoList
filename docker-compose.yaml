@@ -30,6 +30,11 @@ services:
     depends_on:
       postgres:
          condition: service_healthy
+    healthcheck:
+      test: curl -sS http://127.0.0.1:8000/ping || exit 1
+      interval: 3s
+      timeout: 3s
+      retries: 3
     command: python manage.py runserver 0.0.0.0:8000
 #  bot:
 #    image: helselga/diplom:$GITHUB_REF_NAME-$GITHUB_RUN_ID
